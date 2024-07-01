@@ -1,12 +1,17 @@
 package odiro.config.auth;
 
-import odiro.domain.Member;
+import jakarta.persistence.Entity;
+import odiro.domain.member.Member;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Optional;
+
 
 //토큰의 유저 데이터 및 권한 관리
 public class PrincipalDetails implements UserDetails {
@@ -17,9 +22,9 @@ public class PrincipalDetails implements UserDetails {
         this.member = member;
     }
 
-    public Member getMember() {
-        return member;
-    }
+//    public Member getMember() {
+//        return member;
+//    }
 
     @Override
     public String getPassword() {
@@ -30,6 +35,7 @@ public class PrincipalDetails implements UserDetails {
     public String getUsername() {
         return member.getNickname();
     }
+
 
     @Override
     public boolean isAccountNonExpired() {
@@ -53,12 +59,21 @@ public class PrincipalDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        GrantedAuthority authority = new GrantedAuthority() {
-            @Override
-            public String getAuthority() {
-                return member.getAuthority().name(); // 열거형의 이름을 반환
-            }
-        };
-        return Collections.singletonList(authority); // 단일 권한을 리스트로 반환
+//        System.out.println("getAuthorities : 진입");
+//        GrantedAuthority authority = new GrantedAuthority() {
+//            @Override
+//            public String getAuthority() {
+//                System.out.println("getAuthority : 반환");
+//                return member.getAuthority().name(); // 열거형의 이름을 반환
+//            }
+//        };
+//        System.out.println("getAuthorities : 반환");
+//        return Collections.singletonList(authority); // 단일 권한을 리스트로 반환
+
+        System.out.println("getAuthorities : 진입");
+        GrantedAuthority authority = new SimpleGrantedAuthority(member.getAuthority().name());
+        System.out.println("getAuthorities : 반환");
+        return Collections.singletonList(authority);
     }
+
 }
