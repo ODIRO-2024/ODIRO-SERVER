@@ -1,9 +1,8 @@
 package odiro.config.auth;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import odiro.domain.Member;
-import odiro.repository.MemberRepository;
+import odiro.domain.member.Member;
+import odiro.repository.member.MemberRepository;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -13,7 +12,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
-import java.util.Optional;
 
 //닉네임으로 멤버 정보 찾기
 //수정 예정
@@ -26,9 +24,10 @@ public class PrincipalDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         System.out.println("PrincipalDetailsService : 진입");
-        Member member = (Member) memberRepository.findByNickname(username).map(this::createUserDetails)
+        Member member = memberRepository.findByNickname(username)
+//                .map(this::createUserDetails)
                 .orElseThrow(() -> new UsernameNotFoundException(username + " -> 데이터베이스에서 찾을 수 없습니다."));
-
+        System.out.println("PrincipalDetailsService : 리턴");
         // session.setAttribute("loginUser", user);
         return new PrincipalDetails(member);
     }
@@ -38,7 +37,7 @@ public class PrincipalDetailsService implements UserDetailsService {
         GrantedAuthority grantedAuthority = new SimpleGrantedAuthority(member.getAuthority().toString());
 
         return new User(
-                String.valueOf(member.getEmail()),
+                String.valueOf(member.getNickname()),
                 member.getPassword(),
                 Collections.singleton(grantedAuthority)
         );
