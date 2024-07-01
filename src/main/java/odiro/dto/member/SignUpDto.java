@@ -1,12 +1,11 @@
 package odiro.dto.member;
 
-import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.*;
-import odiro.domain.Authority;
-import odiro.domain.Member;
+import odiro.domain.member.Authority;
+import odiro.domain.member.Member;
 
 @Getter
 @Setter
@@ -15,8 +14,6 @@ import odiro.domain.Member;
 public class SignUpDto {
 
 
-    @Pattern(regexp = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+.[A-Za-z]{2,6}$", message = "이메일 형식에 맞지 않습니다.")
-    @NotBlank(message = "이메일을 입력해주세요.")
 
     @Pattern(regexp = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+.[A-Za-z]{2,6}$", message = "이메일 형식에 맞지 않습니다.")
     @NotBlank(message = "이메일을 입력해주세요.")
@@ -38,7 +35,7 @@ public class SignUpDto {
                 .nickname(nickname)
                 .password(password)
                 .authority(Authority.ROLE_USER)
-                .emailVerified(false)
+                .emailVerified(true)
                 .build();
     }
 }
